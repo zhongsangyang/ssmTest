@@ -1,0 +1,92 @@
+<!--返回单一对象-->
+<select id="selectName" resultType="com.lee.User">
+    <![CDATA[
+      select user_name userName from user_table where user_id = #{userId}
+    ]]>
+</select>
+
+
+        <!--返回结果格式 Map<字段名称，字段值>-->
+<select id="selectByName" resultType="hashMap" parameterType="string">
+<![CDATA[
+          SELECT * from user_table where user_name=#{userName}
+     ]]>
+</select>
+
+        <!--调用存储过程-->
+<select id="selectUserFromStoreProcedure" statementType="CALLABLE">
+<![CDATA[
+       {call my_pack.my_proc(
+           #{userId,mode=IN,jdbcType=VARCHAR,javaType=string},
+           #{userName,mode=OUT,jdbcType=FLOAT,javaType=string})}
+       ]]>
+</select>
+
+
+        <!--返回List<User>-->
+<select id="selectUsers" resultType="com.lee.User">
+<![CDATA[
+      select user_id userId, user_name userName from user_table
+     ]]>
+</select>
+
+        <!--重用sql-->
+<sql id="subQuery">
+<![CDATA[
+         WITH MY_SUB_QUERY as (
+        select 'lee' as user_name, '1' as user_id from dual
+        union select 'lee1' ,'2' from dual
+      )
+    ]]>
+</sql>
+
+        <!--动态sql-->
+<sql id="selectOther">
+<include refid="subQuery" />
+<![CDATA[
+        SELECT t.other_id otherId, t.other_name otherName, t.other_flag otherFlag FROM OtherTable t
+            INNER JOIN MY_SUB_QUERY mapper ON mapper.user_id = t.user_id
+     ]]>
+<if test="filterFlag==true">
+    <![CDATA[
+              and t.other_flag = 'Y'
+            ]]>
+</if>
+<!--
+另一个if段
+<if test="flag1==true">
+  ...
+</if>
+-->
+<!--
+使用choose语句,flag1是从mapper方法中传递的参数，如 @Param("flag1") String flag1
+    <choose>
+      <when test="flag1 == 'Y'">
+        t1.flag1 AS flag
+        FROM table1 t1
+      </when>
+      <otherwise>
+        t2.flag2 AS flag
+        FROM table2 t2
+      </otherwise>
+    </choose>
+  -->
+</sql>
+
+        <!--返回数字-->
+<select id="selectCount" resultType="java.lang.Long">
+<![CDATA[
+          SELECT count(*) FROM user_table
+        ]]>
+</select>
+
+        <!--Map参数, 格式Map<参数名称，参数值>-->
+<select id="selectUser"  parameterType="java.util.HashMap" resultType="com.lee.User">
+<![CDATA[
+            SELECT user_id userId, user_name userName from user_table
+          where user_id=#{userId} and user_name = #{userName}
+        ]]>
+</select>
+
+
+https://www.cnblogs.com/zyw-205520/p/4771253.html

@@ -15,8 +15,7 @@
     <mvc:annotation-driven/>
 
     <!-- 静态资源处理  css js imgs -->
-    <mvc:resources location="bootstrap-3.3.7-dist" mapping="/web"/>
-    <mvc:resources mapping="/web" location="bootstrap-table-master"/>
+
 
     <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
     <bean id="mappingJacksonHttpMessageConverter"

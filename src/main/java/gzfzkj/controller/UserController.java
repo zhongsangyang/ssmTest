@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by 钟桑扬 on 2017-12-20.
+ * Created by zhongsangyang on 2017-12-20.
+ * update bu zhongsangyang on 2021-9-18.
  */
 @Controller
 @RequestMapping("/user")
